@@ -1,27 +1,37 @@
-import { Box } from "@mui/material"
-import { IBlogPropsResponseType } from "../../models/BlopProps"
+import { Box } from "@mui/material";
+import { IBlogPropsResponseType } from "../../models/BlopProps";
+import { Link } from "react-router-dom";
+import { routeLocationsEnum } from "../../Router/Router";
+import { CardSize, containerInfo, imgstyles, titleStyles } from "./styles";
 
-const Card:React.FC<IBlogPropsResponseType> = (props) => {
-    const {id, image, title, date, description, author } = props;
-
-    return(
-        <Box>
-            <Box>
-                <Box>
-                {date}
-                  {title}
-                  {description}
-                  {author}  
-                </Box>
-                <Box>
-                    {image}
-                </Box> 
-            </Box>
-            <Box>
-
-            </Box>
-        </Box>
-    )
+interface CardProps {
+  post: IBlogPropsResponseType;
 }
 
-export default Card
+const Card: React.FC<CardProps> = ({ post }) => {
+  const { id, image, title, date, description, author } = post;
+
+  return (
+    <Link
+      to={`${routeLocationsEnum.post}/${id}`}
+      style={{ textDecoration: "none", color: "inherit" }}
+    >
+      <Box key={id} sx={CardSize}>
+        <Box sx={{ objectFit: "cover", borderRadius: "1em", height: "300px" }}>
+          <img src={image} style={imgstyles} />
+        </Box>
+
+        <Box sx={containerInfo}>
+          <Box sx={titleStyles}>{title}</Box>
+          <Box>{description}</Box>
+          <Box sx={{ borderTop: ".5px solid #808080" }}>
+            <Box sx={{ fontWeight: "700" }}>{author}</Box>
+            <Box sx={{ fontSize: "1rem", color: "#808080" }}>{date}</Box>
+          </Box>
+        </Box>
+      </Box>
+    </Link>
+  );
+};
+
+export default Card;
