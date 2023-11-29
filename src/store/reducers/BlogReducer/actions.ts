@@ -2,7 +2,7 @@ import { Dispatch } from "react";
 import { IBlogPropsResponseType } from "../../../models/BlopProps";
 import { BlogReducerEnum } from "./actionType";
 import { AnyAction } from "redux";
-import { getPostByIdFromTMS } from "../../../api/services/service";
+import { getPostByIdFromTMS } from "../../../api/services/postServices/service";
 
 export const setPosts = (postsData: IBlogPropsResponseType[]) => {
   return { type: BlogReducerEnum.SET_POSTS, postsData };

@@ -1,9 +1,10 @@
 import { AnyAction, combineReducers, configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import thunk, { ThunkDispatch } from "redux-thunk";
-import blogReducer from "./reducers/BlogReducer";
+import blogReducer from "./reducers/blogReducer";
+import userReducer from "./reducers/userReducer";
 
-const appReducer = combineReducers({ blogReducer });
+const appReducer = combineReducers({ blogReducer, userReducer });
 
 export const store = configureStore({
   reducer: appReducer,

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { getPostsToStore } from "../../store/reducers/BlogReducer/actions";
+import { getPostsToStore } from "../../store/reducers/blogReducer/actions";
 import { Box, Grid } from "@mui/material";
 import Card from "../../components/card/Card";
 import Header from "../../components/Header/Header";
@@ -27,7 +27,7 @@ const PostList: React.FC = () => {
         <Grid
           container
           spacing={2}
-          sx={{ marginTop: "2rem", padding: "0", marginLeft: "10rem" }}
+          sx={{ marginTop: "2rem", padding: "0", marginLeft: "5rem" }}
         >
           {posts &&
             posts.map((post) => (
