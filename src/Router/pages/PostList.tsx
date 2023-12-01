@@ -1,27 +1,53 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-import { getPostsToStore } from "../../store/reducers/blogReducer/actions";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, IconButton } from "@mui/material";
 import Card from "../../components/card/Card";
 import Header from "../../components/Header/Header";
+import { getBlogPostsToStoreFromTMS } from "../../store/reducers/BlogReducer/actions";
+import AddIcon from "@mui/icons-material/Add";
+import AddPostDialog from "../../components/addPostDialog/addPostDialog";
 
 const PostList: React.FC = () => {
   const { posts } = useAppSelector((state) => state.blogReducer);
   const dispatch = useAppDispatch();
+  const [isAddPostDialogOpen, setIsAddPostDialogOpen] =
+    useState<boolean>(false);
+  const handleChangeDialogIsOpenStatus = (newStatus: boolean) => {
+    setIsAddPostDialogOpen(newStatus);
+  };
 
   useEffect(() => {
-    dispatch(getPostsToStore());
+    dispatch(getBlogPostsToStoreFromTMS());
   }, [dispatch]);
 
   return (
     <>
       <Header />
+      <IconButton
+        onClick={() => handleChangeDialogIsOpenStatus(true)}
+        sx={{
+          marginTop: "1rem",
+          marginLeft: "1rem",
+          paddingBottom: "0",
+          marginBottom: "0",
+        }}
+      >
+        <AddIcon
+          sx={{
+            fontSize: "30px",
+            color: "#fff",
+            background: "#318CE7",
+            borderRadius: "50%",
+            padding: "5px",
+          }}
+        />
+      </IconButton>
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          marginTop: "5rem",
+          marginTop: "1rem",
         }}
       >
         <Grid
@@ -37,6 +63,10 @@ const PostList: React.FC = () => {
             ))}
         </Grid>
       </Box>
+      <AddPostDialog
+        open={isAddPostDialogOpen}
+        onClose={() => setIsAddPostDialogOpen(false)}
+      />
     </>
   );
 };

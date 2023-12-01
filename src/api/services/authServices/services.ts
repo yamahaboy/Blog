@@ -2,9 +2,17 @@ import { baseUrl } from "../../../constants/constants";
 import { AuthMethodsReturnType } from "../../../hooks/useAuth";
 import { UserReducerEnum } from "../../../store/reducers/userReducer/actionTypes";
 import { store } from "../../../store/store";
-import { getLocalStorageWithTime, setLocalStorageWithTime } from "../../../utils/addTimeToExpireToStorage";
+import {
+  getLocalStorageWithTime,
+  setLocalStorageWithTime,
+} from "../../../utils/addTimeToExpireToStorage";
 import { refresh } from "../../../utils/refreshAuthToken";
-import { ActivationData, LoginData, LoginReturnType, SignUpDataType } from "./types";
+import {
+  ActivationData,
+  LoginData,
+  LoginReturnType,
+  SignUpDataType,
+} from "./types";
 
 export const signUp = async (signUpData: SignUpDataType) => {
   const rawData = await fetch(`${baseUrl}/auth/users/`, {

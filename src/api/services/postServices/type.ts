@@ -1,6 +1,6 @@
 import { IBlogPropsResponseType } from "../../../models/BlopProps";
 
-export type GetPostsFromTMSResponseType = {
+export type GetPostsFromResponseType = {
   count?: number;
   next?: string;
   previous?: string;
@@ -15,7 +15,7 @@ export type CreatePostDataType = {
   description: string;
 };
 
-export type GetPostsFromTMSOptionsType = {
+export type GetPostsFromOptionsType = {
   author__course_group?: number;
   limit?: number;
   offset?: number;

@@ -1,95 +1,102 @@
-import { IServiceType } from "../../../models/BlopProps";
+// import { IServiceType } from "../../../models/BlopProps";
+// export const getPostByIdFromTMS = async (): Promise<IServiceType> => {
+//   const rawData = await fetch(
+//     "https://studapi.teachmeskills.by/blog/posts/?limit=12"
+//   );
+//   return await rawData.json();
+// };
 
-// import { UserReducerEnum } from "../../../store/reducers/userReducer/actionTypes";
-// import { store } from "../../../store/store";
-// import { getLocalStorageWithTime } from "../../../utils/addTimeToExpireToStorage";
-// import { refresh } from "../../../utils/refreshAuthToken";
-// import { CreatePostDataType, GetPostsFromTMSOptionsType, GetPostsFromTMSResponseType } from "./type";
+import { postsLimit } from "../../../constants/constants";
+import { UserReducerEnum } from "../../../store/reducers/userReducer/actionTypes";
+import { store } from "../../../store/store";
+import { getLocalStorageWithTime } from "../../../utils/addTimeToExpireToStorage";
+import { refresh } from "../../../utils/refreshAuthToken";
+import {
+  CreatePostDataType,
+  GetPostsFromOptionsType,
+  GetPostsFromResponseType,
+} from "./type";
 
-export const getPostByIdFromTMS = async (): Promise<IServiceType> => {
+const getQueryParams = (options: any) => {
+  if (options === undefined) return "";
+  if (
+    Object.keys(options).filter((key) => options[key] !== undefined).length ===
+    0
+  ) {
+    return "";
+  }
+  let queryParamsString: string = "?";
+  Object.keys(options).forEach((key, index, arr) => {
+    queryParamsString += `${key}=${options[key]}${
+      index === arr.length - 1 ? "" : "&"
+    }`;
+  });
+  return queryParamsString;
+};
+
+export const getPostByIdFromTMS = async (postId: number) => {
   const rawData = await fetch(
-    "https://studapi.teachmeskills.by/blog/posts/?limit=12"
+    `https://studapi.teachmeskills.by/blog/posts/${postId}`
   );
+
   return await rawData.json();
 };
 
+export const getPostsFromTMS = async (options?: GetPostsFromOptionsType) => {
+  let authToken = getLocalStorageWithTime("authToken");
+  if (authToken === false) {
+    const response = await refresh();
+    if (!response) {
+      store.dispatch({ type: UserReducerEnum.LOGOUT_BY_REFRESH });
+      return false;
+    }
+  }
 
-// const getQueryParams = (options: any) => {
-//   if (options === undefined) return '';
-//   if (
-//     Object.keys(options).filter((key) => options[key] !== undefined).length ===
-//     0
-//   ) {
-//     return '';
-//   }
-//   let queryParamsString: string = '?';
-//   Object.keys(options).forEach((key, index, arr) => {
-//     queryParamsString += `${key}=${options[key]}${
-//       index === arr.length - 1 ? '' : '&'
-//     }`;
-//   });
-//   return queryParamsString;
-// };
+  authToken = getLocalStorageWithTime("authToken") as string;
 
-// export const getPostByIdFromTMS = async (postId: number) => {
-//   const rawData = await fetch(
-//     `https://studapi.teachmeskills.by/blog/posts/${postId}`
-//   );
+  const rawData = await fetch(
+    `https://studapi.teachmeskills.by/blog/posts${getQueryParams({
+      ...options,
+      limit: postsLimit,
+    })}`
+  );
 
-//   return await rawData.json();
-// };
+  const { count, results }: GetPostsFromResponseType = await rawData.json();
+  if (!results) return;
 
-// export const getPostsFromTMS = async (options?: GetPostsFromTMSOptionsType) => {
-//   let authToken = getLocalStorageWithTime('authToken');
-//   if (authToken === false) {
-//     const response = await refresh();
-//     if (!response) {
-//       store.dispatch({ type: UserReducerEnum.LOGOUT_BY_REFRESH });
-//       return false;
-//     }
-//   }
+  return { count, results };
+};
 
-//   authToken = getLocalStorageWithTime('authToken') as string;
+export const createPostFromTMS = async (createPostData: CreatePostDataType) => {
+  let authToken = getLocalStorageWithTime("authToken");
+  if (authToken === false) {
+    const response = await refresh();
+    if (!response) {
+      store.dispatch({ type: UserReducerEnum.LOGOUT_BY_REFRESH });
+      return false;
+    }
+  }
 
-//   const rawData = await fetch(
-//     `https://studapi.teachmeskills.by/blog/posts${getQueryParams(options)}`
-//   );
-//   const { results }: GetPostsFromTMSResponseType = await rawData.json();
-//   if (!results) return;
+  authToken = getLocalStorageWithTime("authToken");
+  const rawData = await fetch(`https://studapi.teachmeskills.by/blog/posts/`, {
+    method: "POST",
+    body: JSON.stringify(createPostData),
+  });
+  return await rawData.json();
+};
 
-//   return results;
-// };
+export const generateImage = async () => {
+  let authToken = getLocalStorageWithTime("authToken");
+  if (authToken === false) {
+    const response = await refresh();
+    if (!response) {
+      store.dispatch({ type: UserReducerEnum.LOGOUT_BY_REFRESH });
+      return false;
+    }
+  }
 
-// export const createPostFromTMS = async (createPostData: CreatePostDataType) => {
-//   let authToken = getLocalStorageWithTime('authToken');
-//   if (authToken === false) {
-//     const response = await refresh();
-//     if (!response) {
-//       store.dispatch({ type: UserReducerEnum.LOGOUT_BY_REFRESH });
-//       return false;
-//     }
-//   }
+  authToken = getLocalStorageWithTime("authToken");
 
-//   authToken = getLocalStorageWithTime('authToken');
-//   const rawData = await fetch(`https://studapi.teachmeskills.by/blog/posts/`, {
-//     method: 'POST',
-//     body: JSON.stringify(createPostData),
-//   });
-//   return await rawData.json();
-// };
-
-// export const generateImage = async () => {
-//   let authToken = getLocalStorageWithTime('authToken');
-//   if (authToken === false) {
-//     const response = await refresh();
-//     if (!response) {
-//       store.dispatch({ type: UserReducerEnum.LOGOUT_BY_REFRESH });
-//       return false;
-//     }
-//   }
-
-//   authToken = getLocalStorageWithTime('authToken');
-
-//   const rawData = await fetch('https://random.imagecdn.app/150/150');
-//   return await rawData.blob();
-// };
+  const rawData = await fetch("https://random.imagecdn.app/360/300");
+  return await rawData.blob();
+};
