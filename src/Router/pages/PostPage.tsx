@@ -18,7 +18,7 @@ const PostPage: React.FC = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginTop: "10rem",
+          marginTop:"4rem"
         }}
       >
         {selectedPost && <Card post={selectedPost} />}
