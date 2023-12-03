@@ -4,10 +4,6 @@ export const headerStyles = {
   backgroundColor: "#318CE7",
   boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.5)",
   gap: "10px",
-  // position: "relative",
-  // top: "0",
-  // left: "0",
-  // right: "0",
   zIndex: "1000",
 };
 

@@ -21,4 +21,5 @@ export type GetPostsFromOptionsType = {
   offset?: number;
   ordering?: string;
   search?: string;
+  page?: number;
 };

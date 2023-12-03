@@ -8,6 +8,7 @@ type BlogTMSReducerType = {
   searchString: string;
   activePost: IBlogPropsResponseType | null;
   currentPage: number;
+  count: number
 };
 
 const defState: BlogTMSReducerType = {
@@ -16,6 +17,7 @@ const defState: BlogTMSReducerType = {
   searchString: "",
   activePost: null,
   currentPage: 1,
+  count:1
 };
 
 const blogTMSReducer: Reducer<BlogTMSReducerType> = (
@@ -38,7 +40,9 @@ const blogTMSReducer: Reducer<BlogTMSReducerType> = (
     case BlogReducerEnum.SET_ACTIVE_POST_TMS:
       return { ...state, activePost: action.activePost };
     case BlogReducerEnum.SET_CURRENT_PAGE:
-      return { ...state, currentPage: action.currentPage };
+      return { ...state, currentPage: action.page };
+      case BlogReducerEnum.SET_COUNT_OF_POSTS:
+        return { ...state, count: action.countOfPosts };
     default:
       return { ...state };
   }

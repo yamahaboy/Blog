@@ -6,6 +6,7 @@ import Header from "../../components/Header/Header";
 import { getBlogPostsToStoreFromTMS } from "../../store/reducers/BlogReducer/actions";
 import AddIcon from "@mui/icons-material/Add";
 import AddPostDialog from "../../components/addPostDialog/addPostDialog";
+import PaginationComponent from "../../components/pagination/pagination";
 
 const PostList: React.FC = () => {
   const { posts } = useAppSelector((state) => state.blogReducer);
@@ -15,7 +16,6 @@ const PostList: React.FC = () => {
   const handleChangeDialogIsOpenStatus = (newStatus: boolean) => {
     setIsAddPostDialogOpen(newStatus);
   };
-
   useEffect(() => {
     dispatch(getBlogPostsToStoreFromTMS());
   }, [dispatch]);
@@ -62,6 +62,9 @@ const PostList: React.FC = () => {
               </Grid>
             ))}
         </Grid>
+      </Box>
+      <Box sx={{display:"flex", alignItems:"center", justifyContent:"center", margin:"15px"}}>
+      <PaginationComponent />
       </Box>
       <AddPostDialog
         open={isAddPostDialogOpen}

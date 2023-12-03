@@ -24,28 +24,33 @@ import { AnyAction } from "redux";
 import { getPostsFromTMS } from "../../../api/services/postServices/service";
 import { IBlogPropsResponseType } from "../../../models/BlopProps";
 import { BlogReducerEnum } from "./actionType";
-
+import { postsLimit } from "../../../constants/constants";
 export const getBlogPostsToStoreFromTMS = (
+  page: number = 1,
   options?: GetPostsFromOptionsType
 ) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     dispatch(setIsLoadingStatusFromTMS(true));
 
-    const dataPosts = await getPostsFromTMS(options);
+    const dataPosts = await getPostsFromTMS({
+      ...options,
+      limit: postsLimit,
+      offset: (page - 1) * postsLimit,
+    });
 
-    if (dataPosts === undefined) {
+    if (!dataPosts) {
       dispatch(setIsLoadingStatusFromTMS(false));
       return;
     }
 
     const { count, results } = dataPosts as GetPostsFromResponseType;
-    console.log(count, results, "DATAS");
 
     if (count === undefined || results === undefined) {
       dispatch(setIsLoadingStatusFromTMS(false));
       return;
     }
 
+    dispatch(setCountOfPosts(count));
     dispatch(setBlogPostsToStoreFromTMS(results));
 
     dispatch(setIsLoadingStatusFromTMS(false));
@@ -87,5 +92,19 @@ export const setSearchStringToStoreFromTMS = (newSearchString: string) => {
   return {
     type: BlogReducerEnum.SET_SEARCH_STRING_TMS,
     newSearchString,
+  };
+};
+
+export const setCountOfPosts = (countOfPosts: number) => {
+  return {
+    type: BlogReducerEnum.SET_COUNT_OF_POSTS,
+    countOfPosts,
+  };
+};
+
+export const setCurrentPage = (page: number) => {
+  return {
+    type: BlogReducerEnum.SET_CURRENT_PAGE,
+    page,
   };
 };
