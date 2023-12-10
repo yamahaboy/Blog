@@ -1,18 +1,22 @@
-import React from "react";
+import React, { BaseSyntheticEvent, useEffect } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, TextField } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { burgerIconStyles, headerStyles } from "./styles";
 import DrawerMenu from "../drawer/Drawer";
 import Logo from "../../assets/svg/blog-svgrepo-com.svg";
 import { routeLocationsEnum } from "../../Router/Router";
-import { useAppSelector } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { useDebounce } from "../../hooks/useDebounce";
+import { setSearchStringToStore } from "../../store/reducers/BlogReducer/actions";
 
 const Header = React.memo(() => {
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const homeNavigation = useNavigate();
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const { user } = useAppSelector((state) => state.userReducer);
+  const dispatch = useAppDispatch();
 
   const handleToggleDrawer = () => {
     setIsOpenDrawer(!isOpenDrawer);
@@ -21,6 +25,16 @@ const Header = React.memo(() => {
   const navigateTo = (path: string) => () => {
     homeNavigation(path);
   };
+
+  const debouncedValue = useDebounce(searchTerm);
+
+  const handleChangeSearchValue = (e: BaseSyntheticEvent) => {
+    setSearchTerm(e.target.value);
+  };
+
+  useEffect(() => {
+    dispatch(setSearchStringToStore(debouncedValue));
+  }, [debouncedValue, dispatch]);
 
   return (
     <Box sx={headerStyles}>
@@ -46,6 +60,13 @@ const Header = React.memo(() => {
             width: "96px",
             height: "96px",
           }}
+        />
+        <TextField
+          label="Search"
+          variant="outlined"
+          value={searchTerm}
+          onChange={handleChangeSearchValue}
+          sx={{ marginLeft: "10px" }}
         />
         <Box
           sx={{

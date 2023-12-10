@@ -1,11 +1,3 @@
-// import { IServiceType } from "../../../models/BlopProps";
-// export const getPostByIdFromTMS = async (): Promise<IServiceType> => {
-//   const rawData = await fetch(
-//     "https://studapi.teachmeskills.by/blog/posts/?limit=12"
-//   );
-//   return await rawData.json();
-// };
-
 import { postsLimit } from "../../../constants/constants";
 import { UserReducerEnum } from "../../../store/reducers/userReducer/actionTypes";
 import { store } from "../../../store/store";
@@ -34,7 +26,7 @@ const getQueryParams = (options: any) => {
   return queryParamsString;
 };
 
-export const getPostByIdFromTMS = async (postId: number) => {
+export const getPostByIdFrom = async (postId: number) => {
   const rawData = await fetch(
     `https://studapi.teachmeskills.by/blog/posts/${postId}`
   );
@@ -42,7 +34,7 @@ export const getPostByIdFromTMS = async (postId: number) => {
   return await rawData.json();
 };
 
-export const getPostsFromTMS = async (options?: GetPostsFromOptionsType) => {
+export const getPostsFrom = async (options?: GetPostsFromOptionsType) => {
   let authToken = getLocalStorageWithTime("authToken");
   if (authToken === false) {
     const response = await refresh();
@@ -67,7 +59,7 @@ export const getPostsFromTMS = async (options?: GetPostsFromOptionsType) => {
   return { count, results };
 };
 
-export const createPostFromTMS = async (createPostData: CreatePostDataType) => {
+export const createPostFrom = async (createPostData: CreatePostDataType) => {
   let authToken = getLocalStorageWithTime("authToken");
   if (authToken === false) {
     const response = await refresh();

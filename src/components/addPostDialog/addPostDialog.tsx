@@ -11,7 +11,7 @@ import {
   TextField,
 } from "@mui/material";
 import {
-  createPostFromTMS,
+  createPostFrom,
   generateImage,
 } from "../../api/services/postServices/service";
 
@@ -42,8 +42,8 @@ const AddPostDialog: React.FC<Props> = ({ open, onClose }) => {
       lesson_num: 2020,
     };
 
-    createPostFromTMS(postData);
-    console.log(createPostFromTMS(postData), "Post");
+    createPostFrom(postData);
+    console.log(createPostFrom(postData), "Post");
   };
 
   return (

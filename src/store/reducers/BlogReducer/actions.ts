@@ -1,27 +1,10 @@
-// import { Dispatch } from "react";
-// import { IBlogPropsResponseType } from "../../../models/BlopProps";
-// import { BlogReducerEnum } from "./actionType";
-// import { AnyAction } from "redux";
-// import { getPostByIdFromTMS } from "../../../api/services/postServices/service";
-
-// export const setPosts = (postsData: IBlogPropsResponseType[]) => {
-//   return { type: BlogReducerEnum.SET_POSTS, postsData };
-// };
-
-// export const getPostsToStore = () => {
-//   return async (dispatch: Dispatch<AnyAction>) => {
-//     const [dataposts] = await Promise.all([getPostByIdFromTMS()]);
-//     dispatch(setPosts(dataposts.results));
-//   };
-// };
-
 import { Dispatch } from "react";
 import {
   GetPostsFromOptionsType,
   GetPostsFromResponseType,
 } from "../../../api/services/postServices/type";
 import { AnyAction } from "redux";
-import { getPostsFromTMS } from "../../../api/services/postServices/service";
+import { getPostsFrom } from "../../../api/services/postServices/service";
 import { IBlogPropsResponseType } from "../../../models/BlopProps";
 import { BlogReducerEnum } from "./actionType";
 import { postsLimit } from "../../../constants/constants";
@@ -32,7 +15,7 @@ export const getBlogPostsToStoreFromTMS = (
   return async (dispatch: Dispatch<AnyAction>) => {
     dispatch(setIsLoadingStatusFromTMS(true));
 
-    const dataPosts = await getPostsFromTMS({
+    const dataPosts = await getPostsFrom({
       ...options,
       limit: postsLimit,
       offset: (page - 1) * postsLimit,
@@ -106,5 +89,26 @@ export const setCurrentPage = (page: number) => {
   return {
     type: BlogReducerEnum.SET_CURRENT_PAGE,
     page,
+  };
+};
+
+export const setSearchStringToStore = (newSearch: string) => {
+  return {
+    type: BlogReducerEnum.SET_SEARCH,
+    newSearch,
+  };
+};
+
+export const setEditPost = (editPost: IBlogPropsResponseType | null) => {
+  return {
+    type: BlogReducerEnum.SET_EDIT_POST,
+    editPost,
+  };
+};
+
+export const setAuthors = (authors: string[]) => {
+  return {
+    type: BlogReducerEnum.SET_AUTHORS,
+    authors,
   };
 };

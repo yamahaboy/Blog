@@ -8,7 +8,10 @@ type BlogTMSReducerType = {
   searchString: string;
   activePost: IBlogPropsResponseType | null;
   currentPage: number;
-  count: number
+  count: number;
+  newSearch: string;
+  editPost: IBlogPropsResponseType | null;
+  authors: string[];
 };
 
 const defState: BlogTMSReducerType = {
@@ -17,7 +20,10 @@ const defState: BlogTMSReducerType = {
   searchString: "",
   activePost: null,
   currentPage: 1,
-  count:1
+  count: 1,
+  newSearch: "",
+  editPost: null,
+  authors: [],
 };
 
 const blogTMSReducer: Reducer<BlogTMSReducerType> = (
@@ -41,8 +47,14 @@ const blogTMSReducer: Reducer<BlogTMSReducerType> = (
       return { ...state, activePost: action.activePost };
     case BlogReducerEnum.SET_CURRENT_PAGE:
       return { ...state, currentPage: action.page };
-      case BlogReducerEnum.SET_COUNT_OF_POSTS:
-        return { ...state, count: action.countOfPosts };
+    case BlogReducerEnum.SET_COUNT_OF_POSTS:
+      return { ...state, count: action.countOfPosts };
+    case BlogReducerEnum.SET_SEARCH:
+      return { ...state, newSearch: action.newSearch };
+    case BlogReducerEnum.SET_EDIT_POST:
+      return { ...state, editPost: action.editPost };
+    case BlogReducerEnum.SET_AUTHORS:
+      return { ...state, authors: action.authors };
     default:
       return { ...state };
   }

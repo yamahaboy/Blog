@@ -7,18 +7,24 @@ import { getBlogPostsToStoreFromTMS } from "../../store/reducers/BlogReducer/act
 import AddIcon from "@mui/icons-material/Add";
 import AddPostDialog from "../../components/addPostDialog/addPostDialog";
 import PaginationComponent from "../../components/pagination/pagination";
+import EditPostDialog from "../../components/editPostDialog/editPostDialog";
 
 const PostList: React.FC = () => {
-  const { posts } = useAppSelector((state) => state.blogReducer);
+  const { posts, newSearch } = useAppSelector((state) => state.blogReducer);
   const dispatch = useAppDispatch();
   const [isAddPostDialogOpen, setIsAddPostDialogOpen] =
     useState<boolean>(false);
   const handleChangeDialogIsOpenStatus = (newStatus: boolean) => {
     setIsAddPostDialogOpen(newStatus);
   };
+
   useEffect(() => {
-    dispatch(getBlogPostsToStoreFromTMS());
-  }, [dispatch]);
+    if (newSearch) {
+      dispatch(getBlogPostsToStoreFromTMS(1, { search: newSearch }));
+    } else {
+      dispatch(getBlogPostsToStoreFromTMS());
+    }
+  }, [dispatch, newSearch]);
 
   return (
     <>
@@ -63,13 +69,21 @@ const PostList: React.FC = () => {
             ))}
         </Grid>
       </Box>
-      <Box sx={{display:"flex", alignItems:"center", justifyContent:"center", margin:"15px"}}>
-      <PaginationComponent />
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          margin: "15px",
+        }}
+      >
+        <PaginationComponent />
       </Box>
       <AddPostDialog
         open={isAddPostDialogOpen}
         onClose={() => setIsAddPostDialogOpen(false)}
       />
+      <EditPostDialog />
     </>
   );
 };
